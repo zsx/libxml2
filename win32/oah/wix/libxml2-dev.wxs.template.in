@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Module Id="libxml2dev" Version="@VERSION@.0" Language="1033">
+		<Package Id="{30A9C008-64C7-42a5-B3FF-D6DF240E84A5}"
+				Description="Development package without source code, but includes: headers, import libraries, binaries and pkg-config files"
+				Manufacturer="Free Software Community" InstallerVersion="300" />
+
+		<Dependency RequiredId="libxml2.299267FB_6E3B_458D_AC7A_40DB6A2D29F5" RequiredLanguage="0" RequiredVersion="@VERSION@" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="MODULE_DIR" Name=".">
+				<Directory Id="ModuleInclude" Name="include">
+					<Directory Id="IncludeLibXML2" Name="libxml2">
+						<Directory Id="IncludeLibXML2SubLibXML" Name="libxml">
+							<Component Id="includes" Guid="{B52570C8-20FC-4504-A47D-97BC20A1BA8D}">
+								%(include/libxml2/libxml_files)s
+							</Component>
+						</Directory>
+					</Directory>
+				</Directory>
+
+				<Directory Id="ModuleLib" Name="lib">
+					<Component Id="libs" Guid="{D0461DC3-4AA6-4e75-8180-A307DFC31854}">
+						%(lib_files)s
+					</Component>
+
+					<Directory Id="LibPkgConfig" Name="pkgconfig">
+						<Component Id="pcs" Guid="{675FEE6E-52F7-4827-A964-5B2079433170}">
+							%(pc_files)s
+						</Component>
+					</Directory>
+				</Directory>
+
+				<Directory Id="ModuleRedist" Name="redist">
+					<Component Id="msms" Guid="{5CB03CBA-98BA-4032-A8E9-9FCA870496F7}">
+						<File Id="libxml2.msm" Source="Win32\libxml2.msm" />
+					</Component>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Module>
+</Wix>

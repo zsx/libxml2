@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Module Id='libxml2' Version='@VERSION@.0' Language="1033">
+		<Package Id="{299267FB-6E3B-458d-AC7A-40DB6A2D29F5}"
+				Description="XML C parser and toolkit developed for the Gnome project."
+				Manufacturer="Free Software Community" InstallerVersion="300" />
+
+		<Directory Id='TARGETDIR' Name='SourceDir'>
+			<Directory Id='MODULE_DIR' Name='.'>
+				<Directory Id="FossBinDir" Name="bin">
+					<Component Id="libxml2" Guid="{97E93D80-6F34-4940-89FD-DC07F37CB090}">
+						<File Id="libxml2.dll" Source="..\Win32\Release\bin\libxml2.dll" />
+					</Component>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Module>
+</Wix>
