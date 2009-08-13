@@ -14,6 +14,8 @@
 
 #include <stdio.h>
 #include <libxml/xmlversion.h>
+#include <libxml/xmlexports.h>
+
 
 /**
  * DEBUG_MEMORY:
