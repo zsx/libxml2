@@ -53,9 +53,9 @@ env['DOT_IN_SUBS'] = {'@LIBXML_VERSION_NUMBER@': LIBXML_VERSION_NUMBER,
                       '@exec_prefix@' : '${prefix}/bin', 
                       '@libdir@' : '${prefix}/lib', 
                       '@includedir@' : '${prefix}/include',
-                      '@XML_INCLUDEDIR': '-I${includedir}',
-                      '@Z_LIBS': '-lz',
-                      '@ICONV_LIBS': '-liconv'
+                      '@XML_INCLUDEDIR@': '-I${includedir}/libxml2',
+                      '@Z_LIBS@': '-lz',
+                      '@ICONV_LIBS@': '-liconv'
                       }
 
 env.DotIn('include/config.h', 'include/win32config.h')
