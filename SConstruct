@@ -9,7 +9,8 @@ opts.Add(BoolVariable('DEBUG', 'Build with Debugging information', 0))
 opts.Add(PathVariable('PERL', 'Path to the executable perl', r'C:\Perl\bin\perl.exe', PathVariable.PathIsFile))
 opts.Add(PathVariable('PYTHON_INCLUDE', 'Path to the python include directory', r'C:\Python26\include', PathVariable.PathIsDir))
 opts.Add(PathVariable('PYTHON_LIB', 'Path to the python library directory', r'C:\Python26\lib', PathVariable.PathIsDir))
-opts.Add(BoolVariable('WITH_TRIO_SOURCES', 'Path to the python library directory', 0))
+opts.Add(BoolVariable('WITH_TRIO_SOURCES', 'build with trio', 0))
+opts.Add(BoolVariable('WITH_OSMSVCRT', 'Link with the os supplied msvcrt.dll instead of the one supplied by the compiler (msvcr90.dll, for instance)', 0))
 
 env = Environment(variables = opts,
                   ENV=os.environ, tools = ['default', GBuilder])
@@ -18,6 +19,10 @@ Initialize(env)
 env.Append(CPPPATH=['#'])
 env.Append(CFLAGS=env['DEBUG_CFLAGS'])
 env.Append(CPPDEFINES=env['DEBUG_CPPDEFINES'])
+
+if env['WITH_OSMSVCRT']:
+    env['LIB_SUFFIX'] = '-2'
+    env.Append(CPPDEFINES=['MSVCRT_COMPAT_STAT', 'MSVCRT_COMPAT_SPRINTF'])
 
 LIBXML_MAJOR_VERSION=2
 LIBXML_MINOR_VERSION=7
@@ -64,6 +69,7 @@ env.DotIn('libxml-2.0.pc', 'libxml-2.0.pc.in')
 env.Alias('install', env.Install('$PREFIX/lib/pkgconfig', 'libxml-2.0.pc'))
 
 env.ParseConfig('pkg-config zlib --cflags --libs')
+env['PDB']='libxml2.pdb'
 dll = env.SharedLibrary(['libxml2' + env['LIB_SUFFIX'] + '.dll', 'xml2.lib'], libxml2_SOURCES)
 env.AddPostAction(dll, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
 
@@ -80,4 +86,6 @@ env.Append(LIBS = ['Ws2_32'])
 env.Alias('install', env.Install('$PREFIX/bin', 'libxml2' + env['LIB_SUFFIX'] + '.dll'))
 env.Alias('install', env.Install('$PREFIX/lib', 'xml2.lib'))
 env.Alias('install', env.InstallAs('$PREFIX/lib/libxml2.lib', 'xml2.lib'))
+if env['DEBUG']:
+    env.Alias('install', env.Install('$PREFIX/pdb', 'libxml2.pdb'))
 SConscript(['include/libxml/SConscript'], exports = 'env')
