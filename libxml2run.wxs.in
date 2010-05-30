@@ -1,0 +1,16 @@
+<?xml version='1.0'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <Module Id='Libxml2Run' Language='1033' Version='@VERSION@'>
+      <Package Id='4eaa2fa8-0d66-4c94-8f5d-a68d38aa05b0' Description='Libxml2 runtime package'
+                Comments='This is a windows installer for libxml2 library runtime files'
+                Manufacturer='Gnome4Win' InstallerVersion='200' />
+ 
+      <Directory Id='TARGETDIR' Name='SourceDir'>
+		  <Directory Id='dlls' Name='bin'>
+			  <Component Id='dlls' Guid='46717851-0505-4e71-99c2-05dc244d95e9'>
+				  @DLLS@
+			  </Component>
+		  </Directory>
+      </Directory>
+   </Module>
+</Wix>

@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+   <Module Id='Libxml2Dev' Language='1033' Version='@VERSION@'>
+      <Package Id='2055434a-32e3-4bda-b937-c92aaeb9512b' Description='Libxml2 devlopement package'
+                Comments='This is a windows installer for libxml2 library devlopment files'
+                Manufacturer='Gnome4Win' InstallerVersion='200' />
+ 
+      <Directory Id='TARGETDIR' Name='SourceDir'>
+		  <Directory Id='include' Name='include'>
+			  <Component Id='headers' Guid='63086ffd-b422-4a71-95f5-f32f9886ad3a'>
+				  @HEADERS@
+			  </Component>
+		  </Directory>
+		  <Directory Id='lib' Name='lib'>
+			  <Component Id='libs' Guid='16457865-9e04-4b51-a02d-71fbfd191db2'>
+				  @LIBS@
+			  </Component>
+			  <Directory Id='pkgconfig' Name='pkgconfig'>
+				  <Component Id='pcs' Guid='beae5aa7-36c1-412e-9cb1-b9f3e3b806eb'>
+					  @PCS@
+				  </Component>
+			  </Directory>
+		  </Directory>
+		  <Directory Id='pdb' Name='pdb'>
+			  <Component Id='pdbs' Guid='865af69b-efe0-4751-974d-4b54497e8f79'>
+				  @PDBS@
+			  </Component>
+		  </Directory>
+      </Directory>
+   </Module>
+</Wix>

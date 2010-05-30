@@ -1,7 +1,7 @@
 # vim: ft=python expandtab
 import os
 import re
-from site_init import GBuilder, Initialize
+from site_init import *
 
 opts = Variables()
 opts.Add(PathVariable('PREFIX', 'Installation prefix', os.path.expanduser('~/FOSS'), PathVariable.PathIsDirCreate))
@@ -67,6 +67,7 @@ env.DotIn('include/config.h', 'include/win32config.h')
 
 env.DotIn('libxml-2.0.pc', 'libxml-2.0.pc.in')
 env.Alias('install', env.Install('$PREFIX/lib/pkgconfig', 'libxml-2.0.pc'))
+env['DOT_IN_SUBS']['@PCS@'] = generate_file_element('libxml-2.0.pc', r'lib/pkgconfig', env)
 
 env.ParseConfig('pkg-config zlib --cflags --libs')
 env['PDB']='libxml2.pdb'
@@ -84,8 +85,73 @@ env.Append(CPPDEFINES=['WIN32',
                        'LIBXML_SAX1_ENABLED'])
 env.Append(LIBS = ['Ws2_32'])
 env.Alias('install', env.Install('$PREFIX/bin', 'libxml2' + env['LIB_SUFFIX'] + '.dll'))
+env['DOT_IN_SUBS']['@DLLS@'] = generate_file_element('libxml2' + env['LIB_SUFFIX'] + '.dll', r'bin', env)
 env.Alias('install', env.Install('$PREFIX/lib', 'xml2.lib'))
+env['DOT_IN_SUBS']['@LIBS@'] = generate_file_element(['xml2.lib', 'libxml2.lib'], r'lib', env)
 env.Alias('install', env.InstallAs('$PREFIX/lib/libxml2.lib', 'xml2.lib'))
 if env['DEBUG']:
     env.Alias('install', env.Install('$PREFIX/pdb', 'libxml2.pdb'))
-SConscript(['include/libxml/SConscript'], exports = 'env')
+    env['DOT_IN_SUBS']['@PDBS@'] = generate_file_element(env['PDB'], r'pdb', env)
+#SConscript(['include/libxml/SConscript'], exports = 'env')
+xmlincdir = '$PREFIX/include/libxml2/libxml'
+
+xmlinc_HEADERS = Split("\
+		SAX.h \
+		entities.h \
+		encoding.h \
+		parser.h \
+		parserInternals.h \
+		xmlerror.h \
+		HTMLparser.h \
+		HTMLtree.h \
+		debugXML.h \
+		tree.h \
+		list.h \
+		hash.h \
+		xpath.h \
+		xpathInternals.h \
+		xpointer.h \
+		xinclude.h \
+		xmlIO.h \
+		xmlmemory.h \
+		nanohttp.h \
+		nanoftp.h \
+		uri.h \
+		valid.h \
+		xlink.h \
+		xmlversion.h \
+		DOCBparser.h \
+		catalog.h \
+		threads.h \
+		globals.h \
+		c14n.h \
+		xmlautomata.h \
+		xmlregexp.h \
+		xmlmodule.h \
+		xmlschemas.h \
+		schemasInternals.h \
+		xmlschemastypes.h \
+		xmlstring.h \
+		xmlunicode.h \
+		xmlreader.h \
+		relaxng.h \
+		dict.h \
+		SAX2.h \
+		xmlexports.h \
+		xmlwriter.h \
+		chvalid.h \
+		pattern.h \
+		xmlsave.h \
+		schematron.h")
+
+env.DotIn('include/libxml/xmlversion.h', 'include/libxml/xmlwin32version.h.in')
+env.Alias('install', env.Install(xmlincdir, map(lambda x: 'include/libxml/' + x, xmlinc_HEADERS)))
+env['DOT_IN_SUBS']['@HEADERS@'] = generate_file_element(xmlinc_HEADERS, r'include/libxml2/libxml', env)
+
+env['DOT_IN_SUBS']['@VERSION@'] = LIBXML_VERSION
+
+env.DotIn('libxml2dev.wxs', 'libxml2dev.wxs.in')
+env.DotIn('libxml2run.wxs', 'libxml2run.wxs.in')
+
+env.Alias('install', env.Install('$PREFIX/wxs', 'libxml2run.wxs'))
+env.Alias('install', env.Install('$PREFIX/wxs', 'libxml2dev.wxs'))
