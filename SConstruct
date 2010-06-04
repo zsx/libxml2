@@ -72,14 +72,7 @@ env['DOT_IN_SUBS']['@PCS@'] = generate_file_element('libxml-2.0.pc', r'lib/pkgco
 env.ParseConfig('pkg-config zlib --cflags --libs')
 env['PDB']='libxml2.pdb'
 env.Append(CPPPATH='include')
-env.Append(CPPDEFINES=['WIN32',
-                       'LIBXML_TREE_ENABLED',
-                       'LIBXML_OUTPUT_ENABLED',
-                       'LIBXML_PUSH_ENABLED',
-                       'LIBXML_READER_ENABLED',
-                       'LIBXML_PATTERN_ENABLED',
-                       'LIBXML_WRITER_ENABLED',
-                       'LIBXML_SAX1_ENABLED'])
+env.Append(CPPDEFINES=['WIN32'])
 env.Append(LIBS = ['Ws2_32'])
 dll = env.SharedLibrary(['libxml2' + env['LIB_SUFFIX'] + '.dll', 'xml2.lib'], libxml2_SOURCES)
 env.AddPostAction(dll, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
