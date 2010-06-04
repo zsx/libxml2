@@ -71,9 +71,6 @@ env['DOT_IN_SUBS']['@PCS@'] = generate_file_element('libxml-2.0.pc', r'lib/pkgco
 
 env.ParseConfig('pkg-config zlib --cflags --libs')
 env['PDB']='libxml2.pdb'
-dll = env.SharedLibrary(['libxml2' + env['LIB_SUFFIX'] + '.dll', 'xml2.lib'], libxml2_SOURCES)
-env.AddPostAction(dll, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
-
 env.Append(CPPPATH='include')
 env.Append(CPPDEFINES=['WIN32',
                        'LIBXML_TREE_ENABLED',
@@ -84,8 +81,20 @@ env.Append(CPPDEFINES=['WIN32',
                        'LIBXML_WRITER_ENABLED',
                        'LIBXML_SAX1_ENABLED'])
 env.Append(LIBS = ['Ws2_32'])
-env.Alias('install', env.Install('$PREFIX/bin', 'libxml2' + env['LIB_SUFFIX'] + '.dll'))
-env['DOT_IN_SUBS']['@DLLS@'] = generate_file_element('libxml2' + env['LIB_SUFFIX'] + '.dll', r'bin', env)
+dll = env.SharedLibrary(['libxml2' + env['LIB_SUFFIX'] + '.dll', 'xml2.lib'], libxml2_SOURCES)
+env.AddPostAction(dll, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
+
+env_xmllint = env.Clone(PDB='xmllint.pdb')
+xmllint = env_xmllint.Program('xmllint.exe', ['xmllint.c', 'xml2.lib'])
+env_xmllint.AddPostAction(xmllint, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
+
+env_xmlcatalog = env.Clone(PDB='xmlcatalog.pdb')
+xmlcatalog = env_xmlcatalog.Program('xmlcatalog.exe', ['xmlcatalog.c', 'xml2.lib'])
+env_xmlcatalog.AddPostAction(xmlcatalog, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
+
+env.Alias('install', env.Install('$PREFIX/bin', ['libxml2' + env['LIB_SUFFIX'] + '.dll', 'xmllint.exe', 'xmlcatalog.exe']))
+env['DOT_IN_SUBS']['@DLLS@'] = generate_file_element(['libxml2' + env['LIB_SUFFIX'] + '.dll', 'xmllint.exe', 'xmlcatalog.exe'], r'bin', env)
+
 env.Alias('install', env.Install('$PREFIX/lib', 'xml2.lib'))
 env['DOT_IN_SUBS']['@LIBS@'] = generate_file_element(['xml2.lib', 'libxml2.lib'], r'lib', env)
 env.Alias('install', env.InstallAs('$PREFIX/lib/libxml2.lib', 'xml2.lib'))
