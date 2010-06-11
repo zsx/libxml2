@@ -89,7 +89,7 @@ env.Alias('install', env.Install('$PREFIX/bin', ['libxml2' + env['LIB_SUFFIX'] +
 env['DOT_IN_SUBS']['@DLLS@'] = generate_file_element(['libxml2' + env['LIB_SUFFIX'] + '.dll', 'xmllint.exe', 'xmlcatalog.exe'], r'bin', env)
 
 env.Alias('install', env.Install('$PREFIX/lib', 'xml2.lib'))
-env['DOT_IN_SUBS']['@LIBS@'] = generate_file_element(['xml2.lib', 'libxml2.lib'], r'lib', env)
+env['DOT_IN_SUBS']['@WXSLIBS@'] = generate_file_element(['xml2.lib', 'libxml2.lib'], r'lib', env)
 env.Alias('install', env.InstallAs('$PREFIX/lib/libxml2.lib', 'xml2.lib'))
 if env['DEBUG']:
     env.Alias('install', env.Install('$PREFIX/pdb', 'libxml2.pdb'))

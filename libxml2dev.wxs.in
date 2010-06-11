@@ -13,7 +13,7 @@
 		  </Directory>
 		  <Directory Id='lib' Name='lib'>
 			  <Component Id='libs' Guid='16457865-9e04-4b51-a02d-71fbfd191db2'>
-				  @LIBS@
+				  @WXSLIBS@
 			  </Component>
 			  <Directory Id='pkgconfig' Name='pkgconfig'>
 				  <Component Id='pcs' Guid='beae5aa7-36c1-412e-9cb1-b9f3e3b806eb'>
